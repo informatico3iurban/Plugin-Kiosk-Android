@@ -2,6 +2,8 @@ package cordova.plugin.kiosk;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import android.content.Context;
+import android.util.Log;
 
 import android.content.pm.PackageManager;
 import android.content.ComponentName;
@@ -21,7 +23,7 @@ public class Kiosk extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         context = this.cordova.getActivity().getApplicationContext();
-        
+
         if (action.equals("chooseLauncher")) {
             //String message = args.getString(0);
             this.chooseLauncher(callbackContext);
@@ -49,9 +51,9 @@ public class Kiosk extends CordovaPlugin {
         }
     }
 
-     public static void resetPreferredLauncherAndOpenChooser() {
+     public void resetPreferredLauncherAndOpenChooser() {
         PackageManager packageManager = context.getPackageManager();
-        ComponentName componentName = new ComponentName(context, LicenseManager.class);
+        ComponentName componentName = new ComponentName(context, MainActivity.class);
         packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
         Intent selector = new Intent(Intent.ACTION_MAIN);

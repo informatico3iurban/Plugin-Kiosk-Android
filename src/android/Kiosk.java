@@ -53,7 +53,7 @@ public class Kiosk extends CordovaPlugin {
 
      public void resetPreferredLauncherAndOpenChooser() {
         PackageManager packageManager = context.getPackageManager();
-        ComponentName componentName = new ComponentName(context, CordovaActivity.class);
+        ComponentName componentName = new ComponentName(context, getMainClass());
         packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
         Intent selector = new Intent(Intent.ACTION_MAIN);
@@ -63,4 +63,19 @@ public class Kiosk extends CordovaPlugin {
 
         packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
     }
+
+    public Class getMainClass() {
+        Class mainActivity = null;
+        String packageName = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        String className = launchIntent.getComponent().getClassName();
+
+        try {
+            mainActivity = Class.forName(className);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
+        return mainActivity;
+    }
+
 }

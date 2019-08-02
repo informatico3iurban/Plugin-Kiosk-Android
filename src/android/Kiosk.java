@@ -13,20 +13,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.view.View;
+
 /**
  * This class echoes a string called from JavaScript.
  */
 public class Kiosk extends CordovaPlugin {
     private String TAG = "HOTEL_DIGITAL";
+    private View decorView;
     private Context context;
+    private int IMMERSIVEMODE = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         context = this.cordova.getActivity().getApplicationContext();
 
         if (action.equals("chooseLauncher")) {
-            //String message = args.getString(0);
             this.chooseLauncher(callbackContext);
+            return true;
+        } if (action.equals("enableImmersiveMode")) {
+            this.enableImmersiveMode(callbackContext);
             return true;
         }
         return false;
@@ -42,13 +53,15 @@ public class Kiosk extends CordovaPlugin {
     }
 
      public void chooseLauncher(CallbackContext callback) {
-        context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
-        if (!isMyLauncherDefault()) {
+        Log.d(TAG, "setting launcher");
+
+        //context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
+        //if (!isMyLauncherDefault()) {
             context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
-            
+  
 
             resetPreferredLauncherAndOpenChooser();
-        }
+        //}
     }
 
      public void resetPreferredLauncherAndOpenChooser() {
@@ -62,6 +75,18 @@ public class Kiosk extends CordovaPlugin {
         context.startActivity(selector);
 
         packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+    }
+
+    public void enableImmersiveMode() {
+        decordView = this.cordova.getActivity().getWindow().getDecorView();
+
+        decordView.setSystemUiVisibility(IMMERSIVEMODE);
+        decordView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                decordView.setSystemUiVisibility(IMMERSIVEMODE);
+            }
+        });
     }
 
     public Class getMainClass() {

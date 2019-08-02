@@ -78,6 +78,7 @@ public class Kiosk extends CordovaPlugin {
     }
 
     public void enableImmersiveMode() {
+        Log.d(TAG, "enabling immersive mode");
         decordView = this.cordova.getActivity().getWindow().getDecorView();
 
         decordView.setSystemUiVisibility(IMMERSIVEMODE);

@@ -20,7 +20,6 @@ import android.view.View;
  */
 public class Kiosk extends CordovaPlugin {
     private String TAG = "HOTEL_DIGITAL";
-    private View decorView;
     private Context context;
     private int IMMERSIVEMODE = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -77,10 +76,9 @@ public class Kiosk extends CordovaPlugin {
         packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
     }
 
-    public void enableImmersiveMode() {
+    public void enableImmersiveMode(CallbackContext callback) {
         Log.d(TAG, "enabling immersive mode");
-        decordView = this.cordova.getActivity().getWindow().getDecorView();
-
+        final View decordView = this.cordova.getActivity().getWindow().getDecorView();
         decordView.setSystemUiVisibility(IMMERSIVEMODE);
         decordView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override

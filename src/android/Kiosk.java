@@ -45,7 +45,7 @@ public class Kiosk extends CordovaPlugin {
         context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
         if (!isMyLauncherDefault()) {
             context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
-            Log.d(TAG, "setting launcher");
+            
 
             resetPreferredLauncherAndOpenChooser();
         }
